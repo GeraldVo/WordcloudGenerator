@@ -1,6 +1,5 @@
 const db = require('../db/db');
 
-
 function getAllUsers(callback) {
     db.executeQuery('SELECT * FROM user', [], (err, results) => {
         if (err) {
@@ -26,10 +25,6 @@ function insertUser(id, password, role, callback) {
     });
 
 }
-
-
-
-
 
 module.exports = {
     getAllUsers,
