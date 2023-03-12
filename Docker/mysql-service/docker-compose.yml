@@ -10,7 +10,7 @@ services:
       MYSQL_DATABASE: wordcloud
       MYSQL_ROOT_HOST: "%"
     volumes:
-      - ./mysql-data/latest:/var/lib/mysql
+      - ./data:/var/lib/mysql
     ports:
       - 3307:3306
     expose:

@@ -1,5 +1,22 @@
 const db = require('../db/db');
 
+
+function getUser(benutzerID, callback) {
+
+    db.executeQuery('SELECT * FROM user WHERE benutzerID = ?', benutzerID, (err, results) => {
+        if (err) {
+            console.error(err);
+            callback(err);
+            return;
+        }
+
+        callback(results);
+        console.log(results);
+    });
+};
+
+
+
 function getAllUsers(callback) {
     db.executeQuery('SELECT * FROM user', [], (err, results) => {
         if (err) {
@@ -28,5 +45,6 @@ function insertUser(id, password, role, callback) {
 
 module.exports = {
     getAllUsers,
-    insertUser
+    insertUser,
+    getUser
 };

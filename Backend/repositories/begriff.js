@@ -15,7 +15,7 @@ function insertBegriff(begriff, umfrageID, callback) {
 
 function getAllBegriffFromUmfrage(umfrageID, callback) {
     const whereValues = [umfrageID];
-    db.executeQuery('SELECT * FROM begriff WHERE = ?', whereValues, (err, results) => {
+    db.executeQuery('SELECT * FROM begriff WHERE umfrageID = ?', whereValues, (err, results) => {
         if (err) {
             console.error(err);
             callback(err);
