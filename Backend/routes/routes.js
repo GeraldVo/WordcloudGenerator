@@ -30,7 +30,6 @@ router.post('/login', (req, res) => {
             const token = authorizationHandler.generateToken(user[0].benutzerID);
         
             req.session.user = { username }; // store the user's username in the session
-            res.redirect('localhost:3002/menu.html');
             // Return the token to the client
             res.json({ token });
         } else {
