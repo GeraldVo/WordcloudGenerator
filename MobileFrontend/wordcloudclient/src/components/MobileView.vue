@@ -1,20 +1,31 @@
 <template>
-  <div>
-    <div v-if="!connected">
-      <input v-model="joinCode" placeholder="Enter join code" />
-      <button @click="joinRoom">Join room</button>
+  <div class="container">
+    <div v-if="!connected" class="input-container my-5">
+      <label for="join-code-input">Enter join code:</label>
+      <input id="join-code-input" v-model="joinCode" class="form-control mb-2" />
+      <button @click="joinRoom" class="btn btn-primary btn-block">Join room</button>
     </div>
-    <div v-if="connected">
-      <input
-        v-model="message"
-        @keyup.enter="sendMessage"
-        placeholder="Enter message"
-      />
-      <button @click="sendMessage">Send</button>
-      <button @click="leaveRoom">Umfrage verlassen</button>
+    <div v-if="connected" class="input-container my-5">
+      <label for="message-input">Enter message:</label>
+      <div class="input-group">
+        <input id="message-input" v-model="message" @keyup.enter="sendMessage" class="form-control mb-2" />
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6 mb-3 mb-md-0">
+          <button @click="sendMessage" class="btn btn-primary btn-block">Send</button>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+          <button @click="leaveRoom" class="btn btn-danger btn-block mt-3">Leave Room</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+
+
 
 <script>
 import io from "socket.io-client";
@@ -40,8 +51,10 @@ export default {
     },
     leaveRoom() {
       if (this.socket) {
-        this.socket.disconnect();
-        this.connected = false;
+        if (confirm("Are you sure you want to leave the room?")) {
+          this.socket.disconnect();
+          this.connected = false;
+        }
       }
     },
   },
@@ -53,3 +66,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.leave-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

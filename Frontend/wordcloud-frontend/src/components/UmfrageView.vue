@@ -1,12 +1,14 @@
 <template>
   <div class="umfrage-detail">
     <template v-if="umfrage">
-      <h2>{{ umfrage.name }}</h2>
-      <p>{{ umfrage.name }}</p>
+      <h2 class="umfrage-title">{{ umfrage.name }}</h2>
+      <p class="umfrage-description">{{ umfrage.description }}</p>
     </template>
-    <router-link :to="{ name: 'UmfragenView' }">Back to Object List</router-link> 
+    <router-link class="back-link" :to="{ name: 'UmfragenView' }">Zurück zu alle Umfragen</router-link> 
   </div>
 </template>
+
+
 
 <script>
 import axios from "axios";
@@ -37,28 +39,20 @@ export default {
 }
 </script>
 
-<style scoped>
-.umfrage-detail {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-p {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.25rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
+<style>
+  .umfrage-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .umfrage-description {
+    font-size: 18px;
+    margin-bottom: 24px;
+  }
+  
+  .back-link {
+    display: block;
+    margin-top: 24px;
+  }
 </style>

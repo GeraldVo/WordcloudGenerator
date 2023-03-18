@@ -1,12 +1,16 @@
 <template>
   <div class="login">
     <h2>Login</h2>
-    <form @submit.prevent="login">
-      <label for="username">Username:</label>
-      <input type="text" v-model="username" name="username" required>
-      <label for="password">Password:</label>
-      <input type="password" v-model="password" name="password" required>
-      <button type="submit">Login</button>
+    <form class="login-form" @submit.prevent="login">
+      <div class="form-group mb-3">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" v-model="username" name="username" required>
+      </div>
+      <div class="form-group mb-3">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" v-model="password" name="password" required>
+      </div>
+      <button class="btn btn-primary" type="submit">Login</button>
     </form>
   </div>
 </template>

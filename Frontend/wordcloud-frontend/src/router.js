@@ -66,7 +66,7 @@ const routes = [
 
 routes.forEach((route) => {
   route.beforeEnter = (to, from, next) => {
-    if (auth.loggedIn || to.name === 'Login') {
+    if (auth.state.loggedIn || to.name === 'Login') {
       next();
     } else {
       next({ name: 'Login' });

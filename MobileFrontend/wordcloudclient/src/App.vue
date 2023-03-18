@@ -1,6 +1,8 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <MobileView />
+  <div id="app" class="container">
+    <h1 class="text-center mt-4 mb-2">My App</h1>
+    <MobileView />
+  </div>
 </template>
 
 <script>
@@ -14,13 +16,13 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+h1 {
+  font-size: 32px;
 }
 </style>

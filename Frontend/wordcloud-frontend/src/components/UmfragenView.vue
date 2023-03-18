@@ -1,14 +1,26 @@
 <template>
   <div class="umfrage-list">
     <h2>Umfragen</h2>
-    <ul>
-      <li v-for="umfrage in umfragen" :key="umfrage.umfrageID">
-        <div class="umfrage-item">
-          <p>{{ umfrage.name }}</p>
-          <router-link :to="{ name: 'UmfrageView', params: { umfrageID: umfrage.umfrageID } }">View Details</router-link>
-        </div>
-      </li>
-    </ul>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Umfrage Name</th>
+          <th scope="col">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(umfrage, index) in umfragen" :key="umfrage.umfrageID">
+          <th scope="row">{{ index + 1 }}</th>
+          <td>{{ umfrage.name }}</td>
+          <td>
+            <router-link :to="{ name: 'UmfrageView', params: { umfrageID: umfrage.umfrageID } }">
+              <button type="button" class="btn btn-primary">View Details</button>
+            </router-link>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -40,7 +52,8 @@ export default {
 
 <style scoped>
 .umfrage-list {
-  margin: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
 }
 
 .umfrage-item {
@@ -48,21 +61,19 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  margin-bottom: 0.5rem;
-  background-color: #f2f2f2;
+  border: 1px solid #ccc;
   border-radius: 0.25rem;
+  margin-bottom: 1rem;
 }
 
-.umfrage-item p {
+.umfrage-name {
+  font-size: 1.5rem;
   margin: 0;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
+.umfrage-link {
+  color: #0077c0;
+  text-decoration: none;
 }
 </style>
+
