@@ -2,11 +2,11 @@
   <div class="menu">
     <h2>Menu</h2>
     <div class="buttons">
-      <router-link to="/subsite1">
-        <button>Subsite 1</button>
+      <router-link to="/umfragen">
+        <button>Alle Umfragen anzeigen</button>
       </router-link>
-      <router-link to="/subsite2">
-        <button>Subsite 2</button>
+      <router-link to="/createUmfrage">
+        <button>Neue Umfrage starten</button>
       </router-link>
       <router-link to="/subsite3">
         <button>Subsite 3</button>
@@ -27,6 +27,7 @@ export default {
       localStorage.removeItem("token");
       auth.logout();
       this.$router.push({ name: "Login" });
+      
     },
   },
 };

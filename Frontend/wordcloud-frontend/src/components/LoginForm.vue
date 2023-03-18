@@ -33,10 +33,11 @@ export default {
       .then(response => {
         // Save JWT token to local storage
         localStorage.setItem('jwt', response.data.token);
+        sessionStorage.setItem('username', this.username);
         auth.login();
         
         // Redirect to home page
-        this.$router.push('/subsite1');
+        this.$router.push('/umfragen');
       })
       .catch(error => {
         console.log(error);

@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MenuView from "./components/MenuView.vue";
 import Login from "./components/LoginForm.vue";
-import SubsiteOne from "./components/SubsiteOne.vue";
-import SubsiteTwo from "./components/SubsiteTwo.vue";
+import UmfragenView from "./components/UmfragenView.vue";
+import UmfrageView from "./components/UmfrageView.vue";
+import CreateUmfrageView from "./components/CreateUmfrageView.vue";
 import SubsiteThree from "./components/SubsiteThree.vue";
+import MobileView from "./components/MobileView.vue";
 import auth from './auth';
 
 
@@ -22,17 +24,26 @@ const routes = [
     component: Login,
   },
   {
-    path: "/subsite1",
-    name: "SubsiteOne",
-    component: SubsiteOne,
+    path: "/umfragen",
+    name: "UmfragenView",
+    component: UmfragenView,
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: "/subsite2",
-    name: "SubsiteTwo",
-    component: SubsiteTwo,
+    path: "/umfragen/:umfrageID",
+    name: "UmfrageView",
+    component: UmfrageView,
+    props: true,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/createUmfrage",
+    name: "CreateUmfrageView",
+    component: CreateUmfrageView,
     meta: {
       requiresAuth: true,
     },
@@ -45,6 +56,12 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "/client",
+    name: "MobileView",
+    component: MobileView,
+  },
+
 ];
 
 routes.forEach((route) => {

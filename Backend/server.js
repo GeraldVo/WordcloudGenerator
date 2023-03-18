@@ -1,18 +1,42 @@
-const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const port = process.env.PORT || 3001;
+const socketIO = require("socket.io");
+const http = require("http");
+const begriffRepository = require("./repositories/begriff");
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
+function createSocketServer(joinCode, umfrageID) {
+  const server = http.createServer();
+  const io = socketIO(server);
 
-io.on('connection', (socket) => {
-  socket.on('chat message', msg => {
-    io.emit('chat message', msg);
+  io.on("connection", (socket) => {
+    console.log(`Socket connected: ${socket.id}`);
+
+    socket.on("join", (data) => {
+      if (data === joinCode) {
+        socket.join(joinCode);
+        console.log(`user joined room ${joinCode}`);
+      } else {
+        console.log("invalid join code");
+        socket.emit("invalidJoinCode");
+      }
+    });
+
+    socket.on("chat message", (msg) => {
+      console.log(`Message received from ${socket.id}: ${msg}`);
+      io.to(msg.room).emit("chat message", msg);
+      begriffRepository.insertBegriff(msg, umfrageID, (begriff, error) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        console.log(`Begriff erfolgreich eingefügt: `+ begriff);
+      });
+    });
+
+    socket.on("disconnect", () => {
+      console.log(`Socket disconnected: ${socket.id}`);
+    });
   });
-});
 
-http.listen(port, () => {
-  console.log(`Socket.IO server running at http://localhost:${port}/`);
-});
+  return { io, server };
+}
+
+module.exports = createSocketServer;

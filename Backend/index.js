@@ -7,9 +7,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 app.use(cors());
 const session = require('express-session');
-const http = require('http').Server(app);
-const io = require('./socket');
-const port = process.env.PORT || 3001;
+
 
 
 
@@ -95,11 +93,11 @@ io.on('connection', (socket) => {
 
 */
 
-io.attach(http);
+//io.attach(http);
 
-http.listen(port, () => {
+/*http.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
-});
+}); */
 
 
 
@@ -112,3 +110,4 @@ app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
 
+module.exports = { app };
