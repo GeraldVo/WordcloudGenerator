@@ -41,8 +41,9 @@ http.listen(port, () => {
 */
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -69,42 +70,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //#endregion
 app.use('/', routes);
-
-
-/*
-
-io.use((socket, next) => {
-  const joinCode = socket.handshake.query.joinCode;
-  // Check the validity of the join code here
-  if (joinCode === 'valid_join_code') {
-    return next();
-  }
-  // If the join code is not valid, reject the connection
-  return next(new Error('Invalid join code'));
-});
-
-io.on('connection', (socket) => {
-  socket.on('chat message', msg => {
-    console.log("CHat received");
-    io.emit('chat message', msg);
-  });
-});
-
-
-*/
-
-//io.attach(http);
-
-/*http.listen(port, () => {
-  console.log(`Socket.IO server running at http://localhost:${port}/`);
-}); */
-
-
-
-
-
-
-
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');

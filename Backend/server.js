@@ -4,7 +4,12 @@ const begriffRepository = require("./repositories/begriff");
 
 function createSocketServer(joinCode, umfrageID) {
   const server = http.createServer();
-  const io = socketIO(server);
+  const io = socketIO(server, {
+    cors: {
+      origin: "http://localhost:8081",
+      methods: ["GET", "POST"]
+    }
+  });
 
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id}`);
@@ -13,6 +18,7 @@ function createSocketServer(joinCode, umfrageID) {
       if (data === joinCode) {
         socket.join(joinCode);
         console.log(`user joined room ${joinCode}`);
+        io.to(joinCode).emit("user joined");
       } else {
         console.log("invalid join code");
         socket.emit("invalidJoinCode");

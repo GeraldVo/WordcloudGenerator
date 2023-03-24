@@ -2,30 +2,42 @@
   <div class="container">
     <div v-if="!connected" class="input-container my-5">
       <label for="join-code-input">Enter join code:</label>
-      <input id="join-code-input" v-model="joinCode" class="form-control mb-2" />
-      <button @click="joinRoom" class="btn btn-primary btn-block">Join room</button>
+      <input
+        id="join-code-input"
+        v-model="joinCode"
+        class="form-control mb-2"
+      />
+      <button @click="joinRoom" class="btn btn-primary btn-block">
+        Join room
+      </button>
     </div>
     <div v-if="connected" class="input-container my-5">
       <label for="message-input">Enter message:</label>
       <div class="input-group">
-        <input id="message-input" v-model="message" @keyup.enter="sendMessage" class="form-control mb-2" />
+        <input
+          id="message-input"
+          v-model="message"
+          @keyup.enter="sendMessage"
+          class="form-control mb-2"
+        />
       </div>
       <div class="row justify-content-center">
         <div class="col-12 col-md-6 mb-3 mb-md-0">
-          <button @click="sendMessage" class="btn btn-primary btn-block">Send</button>
+          <button @click="sendMessage" class="btn btn-primary btn-block">
+            Send
+          </button>
         </div>
       </div>
       <div class="row justify-content-center">
         <div class="col-12 col-md-6">
-          <button @click="leaveRoom" class="btn btn-danger btn-block mt-3">Leave Room</button>
+          <button @click="leaveRoom" class="btn btn-danger btn-block mt-3">
+            Leave Room
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-
-
 
 <script>
 import io from "socket.io-client";
@@ -41,7 +53,12 @@ export default {
   },
   methods: {
     joinRoom() {
-      this.socket = io("http://localhost:3001");
+      this.socket = io("http://localhost:3001", {
+        cors: {
+          origin: "http://localhost:8081",
+          methods: ["GET", "POST"],
+        },
+      });
       this.socket.emit("join", this.joinCode);
       this.connected = true;
     },

@@ -4,65 +4,117 @@
     <div v-if="!serverRunning">
       <form class="umfrage-form">
         <div class="form-group row mb-3">
-          <label for="umfrageName" class="col-sm-3 col-form-label">Umfrage Name:</label>
+          <label for="umfrageName" class="col-sm-3 col-form-label"
+            >Umfrage Name:</label
+          >
           <div class="col-sm-9">
-            <input id="umfrageName" class="form-control" type="text" v-model="umfrageName" required>
+            <input
+              id="umfrageName"
+              class="form-control"
+              type="text"
+              v-model="umfrageName"
+              required
+            />
           </div>
         </div>
 
         <div class="form-group row mb-3">
-          <label for="timelimit-input" class="col-sm-3 col-form-label">Max Timelimit in Minuten:</label>
+          <label for="timelimit-input" class="col-sm-3 col-form-label"
+            >Max Timelimit in Minuten:</label
+          >
           <div class="col-sm-9">
-            <input id="timelimit-input" class="form-control" type="number" v-model="maxTimeLimit" required>
+            <input
+              id="timelimit-input"
+              class="form-control"
+              type="number"
+              v-model="maxTimeLimit"
+              required
+            />
           </div>
         </div>
 
         <div class="form-group row mb-3">
-          <label for="max-users-input" class="col-sm-3 col-form-label">Max Users:</label>
+          <label for="max-users-input" class="col-sm-3 col-form-label"
+            >Max Users:</label
+          >
           <div class="col-sm-9">
-            <input id="max-users-input" class="form-control" type="number" v-model="maxUsers" required>
+            <input
+              id="max-users-input"
+              class="form-control"
+              type="number"
+              v-model="maxUsers"
+              required
+            />
           </div>
         </div>
 
         <div class="form-group row mb-3">
-          <label for="max-words-input" class="col-sm-3 col-form-label">Max Words Per User:</label>
+          <label for="max-words-input" class="col-sm-3 col-form-label"
+            >Max Words Per User:</label
+          >
           <div class="col-sm-9">
-            <input id="max-words-input" class="form-control" type="number" v-model="maxWordsPerUser" required>
+            <input
+              id="max-words-input"
+              class="form-control"
+              type="number"
+              v-model="maxWordsPerUser"
+              required
+            />
           </div>
         </div>
 
         <div class="form-group row mb-3">
-          <label for="join-code-input" class="col-sm-3 col-form-label">Join Code:</label>
+          <label for="join-code-input" class="col-sm-3 col-form-label"
+            >Join Code:</label
+          >
           <div class="col-sm-9">
-            <input id="join-code-input" class="form-control" type="text" v-model="joinCode" required>
+            <input
+              id="join-code-input"
+              class="form-control"
+              type="text"
+              v-model="joinCode"
+              required
+            />
           </div>
         </div>
 
         <div class="form-group row mb-3">
           <div class="offset-sm-3 col-sm-9">
-            <button class="btn btn-primary" @click.prevent="umfrageAnlegen">Create Umfrage</button>
+            <button class="btn btn-primary" @click.prevent="umfrageAnlegen">
+              Create Umfrage
+            </button>
           </div>
         </div>
       </form>
 
       <div v-if="umfrageCreated" class="mb-3">
-        <button class="btn btn-primary" @click="startServer">Start Server</button>
+        <button class="btn btn-primary" @click="startServer">
+          Start Server
+        </button>
       </div>
     </div>
 
     <div v-else>
       <router-link to="/umfragen">
-        <button class="btn btn-primary mb-3" @click="stopServer">Stop Server</button>
+        <button class="btn btn-primary mb-3" @click="stopServer">
+          Stop Server
+        </button>
       </router-link>
+
+      <div>
+        <h2>Users in Room</h2>
+        <ul>
+          <li v-for="user in state.users" :key="user">{{ user }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
-
-
-
 <script>
 import axios from "axios";
+import io from "socket.io-client";
+import { reactive } from "vue";
 
 export default {
   name: "CreateUmfrageView",
@@ -77,6 +129,13 @@ export default {
       maxWordsPerUser: 0,
       erstellerID: sessionStorage.getItem("username"),
     };
+  },
+
+  setup() {
+    const state = reactive({
+      users: [],
+    });
+    return { state };
   },
   methods: {
     umfrageAnlegen() {
@@ -109,6 +168,13 @@ export default {
         .then(() => {
           console.log("Socket.io server started");
           this.serverRunning = true;
+
+          // Connect to the socket.io server
+          const socket = io("http://localhost:3001");
+
+          socket.on("user joined", (user) => {
+            this.state.users.push(user);
+          });
         })
         .catch((error) => {
           console.error(error);

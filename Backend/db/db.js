@@ -2,11 +2,11 @@ const mysql = require('mysql');
 
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: 'localhost',
+  host: '172.17.0.1',
   user: 'root',
   password: '123456789',
   database: 'wordcloud',
-  port: '3307'
+  port: '3306'
 });
 
 function executeQuery(query, params, callback) {

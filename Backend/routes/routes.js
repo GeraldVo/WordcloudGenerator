@@ -20,7 +20,6 @@ router.post("/login", (req, res) => {
   const { username, password } = req.body;
   // Retrieve user information from the database
   userRepository.getUser(username, (user, error) => {
-    console.log(user[0].password);
     if (error) {
       console.error(error);
       res.status(500).send("Error getting Users");
