@@ -95,11 +95,9 @@
     </div>
 
     <div v-else>
-      <router-link to="/umfragen">
-        <button class="btn btn-primary mb-3" @click="stopServer">
-          Stop Server
-        </button>
-      </router-link>
+      <button class="btn btn-primary mb-3" @click="stopServer">
+        Stop Server
+      </button>
 
       <div>
         <h2>Users in Room</h2>
@@ -116,11 +114,12 @@ import axios from "axios";
 import io from "socket.io-client";
 import { reactive } from "vue";
 
+
 export default {
   name: "CreateUmfrageView",
   data() {
     return {
-      serverRunning: false,
+      serverRunning: sessionStorage.getItem("serverRunning") === "true",
       umfrageCreated: false,
       joinCode: "",
       umfrageName: "",
@@ -138,8 +137,8 @@ export default {
     return { state };
   },
   methods: {
-    umfrageAnlegen() {
-      axios
+    async umfrageAnlegen() {
+      await axios
         .post("http://localhost:3000/umfrage", {
           name: this.umfrageName,
           teilnehmerAnzahl: this.maxUsers,
@@ -155,6 +154,11 @@ export default {
         .then((response) => {
           this.umfrageCreated = true;
           console.log(response.data);
+          if(this.serverRunning)
+          {
+            this.stopServer();
+          }
+          
         })
         .catch((error) => {
           console.log("ERROR");
@@ -164,20 +168,23 @@ export default {
     },
     startServer() {
       axios
-        .get("http://localhost:3000/startumfrage?joinCode=${this.joinCode}`")
+        .get(`http://localhost:3000/startumfrage?joinCode=${this.joinCode}`)
         .then(() => {
           console.log("Socket.io server started");
           this.serverRunning = true;
 
+          sessionStorage.setItem("serverRunning", true);
           // Connect to the socket.io server
           const socket = io("http://localhost:3001");
 
           socket.on("user joined", (user) => {
+            console.log("User Joined");
             this.state.users.push(user);
           });
         })
         .catch((error) => {
           console.error(error);
+          alert("Try again!");
         });
     },
     stopServer() {
@@ -186,6 +193,7 @@ export default {
         .then(() => {
           console.log("Socket.io server stopped");
           this.serverRunning = false;
+          sessionStorage.setItem("serverRunning", false);
         })
         .catch((error) => {
           console.error(error);

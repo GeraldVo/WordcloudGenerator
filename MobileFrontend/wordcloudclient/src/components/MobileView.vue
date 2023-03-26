@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+const io = require("socket.io-client");
 
 export default {
   data() {
@@ -55,8 +55,8 @@ export default {
     joinRoom() {
       this.socket = io("http://localhost:3001", {
         cors: {
-          origin: "http://localhost:8081",
-          methods: ["GET", "POST"],
+          origins: "*:*",
+          credentials: true,
         },
       });
       this.socket.emit("join", this.joinCode);

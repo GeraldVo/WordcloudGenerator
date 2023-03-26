@@ -4,17 +4,37 @@ const begriffRepository = require("./repositories/begriff");
 
 function createSocketServer(joinCode, umfrageID) {
   const server = http.createServer();
-  const io = socketIO(server, {
+  const io = require("socket.io")(server, {
     cors: {
-      origin: "http://localhost:8081",
-      methods: ["GET", "POST"]
+      origin: "https://localhost:8080",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    },
+    handlePreflightRequest: (req, res) => {
+        const headers = {
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Origin": "*", //or the specific origin you want to give access to,
+            "Access-Control-Allow-Credentials": true
+        };
+        res.writeHead(200, headers);
+        res.end();
     }
+});
+
+  io.origins((origin, callback) => {
+    if (origin !== 'https://localhost:8080') {
+        return callback('origin not allowed', false);
+    }
+    callback(null, true);
   });
+  io.set('origins', '*:*');
 
   io.on("connection", (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
     socket.on("join", (data) => {
+      console.log("Join Code: " + data);
       if (data === joinCode) {
         socket.join(joinCode);
         console.log(`user joined room ${joinCode}`);
@@ -22,6 +42,7 @@ function createSocketServer(joinCode, umfrageID) {
       } else {
         console.log("invalid join code");
         socket.emit("invalidJoinCode");
+        socket.disconnect();
       }
     });
 
@@ -33,7 +54,7 @@ function createSocketServer(joinCode, umfrageID) {
           console.error(error);
           return;
         }
-        console.log(`Begriff erfolgreich eingefügt: `+ begriff);
+        console.log(`Begriff erfolgreich eingefügt: ` + begriff);
       });
     });
 

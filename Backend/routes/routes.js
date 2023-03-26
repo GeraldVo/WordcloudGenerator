@@ -10,7 +10,7 @@ const umfrageRepository = require("../repositories/umfrage");
 const authorizationHandler = require("../authorization/authorization");
 
 const port = process.env.PORT || 3001;
-let io, server, umfrageID;
+let io, server, lastCreatedUmfrageID;
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
@@ -125,7 +125,7 @@ router.post("/umfrage", function (req, res) {
         return;
       }
       console.log("InsertID: " + umfrage.insertId);
-      umfrageID = umfrage.insertId;
+      lastCreatedUmfrageID = umfrage.insertId;
       res.status(200).send(umfrage);
     }
   );
@@ -239,14 +239,8 @@ router.post("/theme", function (req, res) {
 
 router.get("/startumfrage", function (req, res) {
   const joinCode = req.query.joinCode;
-  //const { io, server } = createSocketServer(joinCode);
-  /*server.listen(port, () => {
-        console.log(`Socket.io server listening on port ${port}`);
-      });
-      res.send('Socket.io server started');*/
-
-      console.log("startumfrage UmfrageID: "+umfrageID);
-  ({ io, server } = createSocketServer(joinCode, umfrageID));
+  console.log("startumfrage UmfrageID: " + lastCreatedUmfrageID);
+  const { io, server } = createSocketServer(joinCode, lastCreatedUmfrageID);
 
   server.listen(port, () => {
     console.log(`Socket.io server listening on port ${port}`);
@@ -255,10 +249,15 @@ router.get("/startumfrage", function (req, res) {
 });
 
 router.get("/stopumfrage", function (req, res) {
-  server.close(() => {
-    console.log("Socket.io server stopped");
-  });
-  res.send("Socket.io server stopped");
+  if (server) {
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
+    res.send('Server stopped');
+  } else {
+    res.send('Error: server is not running');
+  }
 });
 
 module.exports = router;
