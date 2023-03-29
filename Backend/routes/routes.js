@@ -10,7 +10,7 @@ const umfrageRepository = require("../repositories/umfrage");
 const authorizationHandler = require("../authorization/authorization");
 
 const port = process.env.PORT || 3001;
-let io, server, lastCreatedUmfrageID;
+let socketServer, server, io, lastCreatedUmfrageID;
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
@@ -240,7 +240,9 @@ router.post("/theme", function (req, res) {
 router.get("/startumfrage", function (req, res) {
   const joinCode = req.query.joinCode;
   console.log("startumfrage UmfrageID: " + lastCreatedUmfrageID);
-  const { io, server } = createSocketServer(joinCode, lastCreatedUmfrageID);
+  socketServer = createSocketServer(joinCode, lastCreatedUmfrageID);
+  io = socketServer.io;
+  server = socketServer.server;
 
   server.listen(port, () => {
     console.log(`Socket.io server listening on port ${port}`);
@@ -251,12 +253,14 @@ router.get("/startumfrage", function (req, res) {
 router.get("/stopumfrage", function (req, res) {
   if (server) {
     server.close(() => {
-      console.log('Server closed');
+      console.log("Server closed");
       process.exit(0);
     });
-    res.send('Server stopped');
+    io.close();
+    res.send("Server stopped");
+    console.log("server stopped");
   } else {
-    res.send('Error: server is not running');
+    res.send("Error: server is not running");
   }
 });
 

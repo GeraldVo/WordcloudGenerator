@@ -8,38 +8,37 @@
             <p class="umfrage-description">{{ umfrage.description }}</p>
           </template>
           <router-link class="back-link" :to="{ name: 'UmfragenView' }">
-            Zurück zu alle Umfragen
+            Back to Survey Overview
           </router-link>
           <div class="form-group">
             <div class="row">
-              <div class="col-md-12">
-                <button class="btn btn-primary mt-3" @click="redrawWordcloud">
-                  Wordcloud Neu erstellen
+              <button class="btn btn-primary mt-3" @click="redrawWordcloud">
+                  Regenerate Wordcloud
                 </button>
-              </div>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <label class="mt-3" for="config-mask">Maske hochladen</label>
+                <label class="mt-3" for="config-mask">Upload Mask</label>
                 <input
                   type="file"
                   id="config-mask"
                   ref="mask"
                   @change="handleMaskChange"
                 />
-                <button
-                  class="btn btn-primary mt-3"
-                  type="button"
-                  @click="clearMask"
-                >
-                  Clear
-                </button>
               </div>
+              <button
+                class="btn btn-primary mt-2"
+                type="button"
+                :disabled="clearDisabled"
+                @click="clearMask"
+              >
+                Clear
+              </button>
             </div>
             <div class="row">
               <div class="col-md-12">
                 <label class="mt-3" for="colorPicker">Color Picker</label>
-                <div class="color-picker my-3">
+                <div class="color-picker my-2">
                   <input
                     id="colorPicker"
                     type="color"
@@ -54,54 +53,15 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12">
-                <div class="tab-pane" id="tab-dim">
-                  <label for="config-width">Width</label>
-                  <div class="input-append">
-                    <input
-                      type="number"
-                      id="config-width"
-                      class="input-small form-control"
-                      min="1"
-                    />
-                    <span class="add-on">px</span>
-                  </div>
-                  <span class="help-block">Leave blank to use page width.</span>
-                  <label for="config-height">Height</label>
-                  <div class="input-append">
-                    <input
-                      type="number"
-                      id="config-height"
-                      class="input-small form-control"
-                      min="1"
-                    />
-                    <span class="add-on">px</span>
-                  </div>
-                  <span class="help-block"
-                    >Leave blank to use 0.65x of the width.</span
-                  >
-                  <label for="config-height"
-                    >Device pixel density (<span title="Dots per 'px' unit"
-                      >dppx</span
-                    >)</label
-                  >
-                  <div class="input-append">
-                    <input
-                      type="number"
-                      id="config-dppx"
-                      class="input-mini form-control"
-                      min="1"
-                      value="1"
-                      required
-                    />
-                    <span class="add-on">x</span>
-                  </div>
-                  <span class="help-block"
-                    >Adjust the weight, grid size, and canvas pixel size for
-                    high pixel density displays.</span
-                  >
-                </div>
-              </div>
+              <a
+                class="btn btn-primary my-2"
+                id="btn-save"
+                href="#"
+                download="wordcloud.png"
+                title="Save canvas"
+                @click="downloadWordcloud"
+                >Save Image</a
+              >
             </div>
           </div>
         </div>
@@ -132,18 +92,20 @@ export default {
       wordcloudContainer: null,
       maskCanvas: null,
       maskFile: null,
-      configWidth: null,
-      configHeight: null,
-      configDppx: null,
       wordcloudWrapper: null,
-      selectedBackgroundColor: null,
+      selectedBackgroundColor: "#FFFFFF",
     };
+  },
+  computed: {
+    clearDisabled() {
+      return !this.maskFile;
+    }
   },
   async created() {
     try {
       console.log("umfrageID:" + this.umfrageID);
       const response = await axios.get(
-        `http://localhost:3000/umfrage/${this.umfrageID}`
+        `http://206.81.16.50:3000/umfrage/${this.umfrageID}`
       );
       this.umfrage = response.data[0];
       console.log(this.umfrage);
@@ -154,7 +116,7 @@ export default {
   async mounted() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/begriff/${this.umfrageID}`
+        `http://206.81.16.50:3000/begriff/${this.umfrageID}`
       );
       const data = response.data;
       this.wordcloudList = data.reduce((acc, curr) => {
@@ -171,9 +133,10 @@ export default {
     }
     this.wordcloudWrapper = document.getElementById("wordcloudWrapper");
     this.wordcloudContainer = document.getElementById("wordcloudContainer");
-    this.configDppx = document.getElementById("config-dppx").value;
-    //this.wordcloudContainer.width = this.wordcloudWrapper.width;
-    // this.wordcloudContainer.height = this.wordcloudWrapper.height;
+    const ratio = 16 / 9;
+    this.wordcloudContainer.width = 1170; // Set the initial width of the canvas
+    this.wordcloudContainer.height = this.wordcloudContainer.width / ratio;
+
     this.wordcloudOptions = {
       list: this.wordcloudList,
       fontFamily: "Arial",
@@ -185,7 +148,10 @@ export default {
       shrinkToFit: true,
       clearCanvas: true,
       gridSize: Math.round((16 * this.wordcloudContainer.width) / 1024),
-      weightFactor: 10,
+      /*weightFactor: (size) => {
+        return (Math.pow(size, 2.3) * this.$refs.wordcloud.offsetWidth) / 1024;
+      },*/
+      weightFactor: 20,
     };
     setTimeout(() => {
       wordcloud(this.wordcloudContainer, this.wordcloudOptions);
@@ -201,8 +167,6 @@ export default {
     },
     redrawWordcloud() {
       this.wordcloudOptions.backgroundColor = this.selectedBackgroundColor;
-      //this.wordcloudContainer.width = this.wordcloudWrapper.width;
-      //this.wordcloudContainer.height = this.wordcloudWrapper.height;
       if (this.maskCanvas) {
         this.wordcloudOptions.clearCanvas = false;
 
@@ -325,8 +289,29 @@ export default {
       };
     },
     clearMask() {
+      this.maskCanvas.remove();
       this.maskCanvas = null;
+      this.maskFile = null;
       this.$refs.mask.value = "";
+    },
+    downloadWordcloud() {
+      var canvas = this.wordcloudContainer;
+      var url = canvas.toDataURL();
+
+      var link = document.createElement("a");
+      link.href = url;
+
+      if ("download" in link) {
+        link.download = "wordcloud.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert(
+          'Please right click and choose "Save As..." to save the generated image.'
+        );
+        window.open(url, "_blank", "width=500,height=300,menubar=yes");
+      }
     },
   },
 };
@@ -350,8 +335,8 @@ export default {
 }
 
 #wordcloudContainer {
-  width: 100%;
-  height: 500px; /* or set the height to your desired value */
+  width: 1170px;
+  height: 760px; /* or set the height to your desired value */
   display: block;
   position: relative;
   overflow: hidden;

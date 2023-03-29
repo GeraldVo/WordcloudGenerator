@@ -53,14 +53,16 @@ export default {
   },
   methods: {
     joinRoom() {
-      this.socket = io("http://localhost:3001", {
+      this.socket = io("http://206.81.16.50:3001", {
         cors: {
           origins: "*:*",
           credentials: true,
         },
       });
       this.socket.emit("join", this.joinCode);
-      this.connected = true;
+      this.socket.on("joined", () => {
+        this.connected = true;
+      });
     },
     sendMessage() {
       this.socket.emit("chat message", this.message);

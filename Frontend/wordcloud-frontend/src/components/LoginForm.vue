@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     async login() {
-      axios.post('http://localhost:3000/login', {
+      axios.post('http://206.81.16.50:3000/login', {
         username: this.username,
         password: this.password,
       })

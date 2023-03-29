@@ -8,6 +8,18 @@ function getAllBlacklistEntries(callback) {
             callback(err);
             return;
         }
+        callback(results);
+        console.log(results);
+    });
+};
+
+function getBlacklistBegriffByName(name, callback) {
+    db.executeQuery('SELECT * FROM blacklist WHERE name = ?', name, (err, results) => {
+        if (err) {
+            console.error(err);
+            callback(err);
+            return;
+        }
 
         callback(results);
         console.log(results);
@@ -29,5 +41,6 @@ function insertBlacklistEntry(name, callback) {
 
 module.exports = {
     getAllBlacklistEntries,
-    insertBlacklistEntry
+    insertBlacklistEntry,
+    getBlacklistBegriffByName
 };

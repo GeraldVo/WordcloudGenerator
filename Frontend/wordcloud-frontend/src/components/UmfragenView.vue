@@ -1,11 +1,11 @@
 <template>
   <div class="umfrage-list">
-    <h2>Umfragen</h2>
+    <h2>Surveys</h2>
     <table class="table table-hover">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Umfrage Name</th>
+          <th scope="col">Survey Name</th>
           <th scope="col">Details</th>
         </tr>
       </thead>
@@ -36,7 +36,7 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get("http://localhost:3000/umfrage");
+      const response = await axios.get("http://206.81.16.50:3000/umfrage");
       this.umfragen = response.data;
     } catch (error) {
       console.error(error);
@@ -53,7 +53,7 @@ export default {
 <style scoped>
 .umfrage-list {
   margin: 2rem auto;
-  max-width: 800px;
+  max-width: 1500px;
 }
 
 .umfrage-item {

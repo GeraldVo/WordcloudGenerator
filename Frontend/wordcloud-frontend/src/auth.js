@@ -12,12 +12,14 @@ export default {
         // your login logic here
         //this.loggedIn = true;
         state.loggedIn = true;
+        sessionStorage.setItem('loggedIn', true);
     },
 
     logout() {
 
         //this.loggedIn = false;
         state.loggedIn = false;
+        sessionStorage.setItem('loggedIn', false);
         
     },
     state

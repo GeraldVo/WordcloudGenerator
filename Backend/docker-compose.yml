@@ -17,10 +17,13 @@ services:
       - 3306
   nodeapp:
     container_name: nodeapp
+    image: wordcloudgeneratorregistry.azurecr.io/my-node-app:latest
     build:
       context: .
       dockerfile: Dockerfile
+    platform: linux/amd64
     restart: always
     ports:
       - 3000:3000
       - 3001:3001
+    command: ["npm", "start"]

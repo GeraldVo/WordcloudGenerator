@@ -1,11 +1,11 @@
 <template>
   <div class="create-umfrage">
-    <h1 class="mb-4">Create Umfrage</h1>
+    <h1 class="mb-4">Create Survey</h1>
     <div v-if="!serverRunning">
       <form class="umfrage-form">
         <div class="form-group row mb-3">
           <label for="umfrageName" class="col-sm-3 col-form-label"
-            >Umfrage Name:</label
+            >Survey Name:</label
           >
           <div class="col-sm-9">
             <input
@@ -20,7 +20,7 @@
 
         <div class="form-group row mb-3">
           <label for="timelimit-input" class="col-sm-3 col-form-label"
-            >Max Timelimit in Minuten:</label
+            >Max Timelimit in Minutes:</label
           >
           <div class="col-sm-9">
             <input
@@ -81,7 +81,7 @@
         <div class="form-group row mb-3">
           <div class="offset-sm-3 col-sm-9">
             <button class="btn btn-primary" @click.prevent="umfrageAnlegen">
-              Create Umfrage
+              Create Survey
             </button>
           </div>
         </div>
@@ -98,7 +98,6 @@
       <button class="btn btn-primary mb-3" @click="stopServer">
         Stop Server
       </button>
-
       <div>
         <h2>Users in Room</h2>
         <ul>
@@ -113,7 +112,7 @@
 import axios from "axios";
 import io from "socket.io-client";
 import { reactive } from "vue";
-
+import router from "@/router";
 
 export default {
   name: "CreateUmfrageView",
@@ -139,7 +138,7 @@ export default {
   methods: {
     async umfrageAnlegen() {
       await axios
-        .post("http://localhost:3000/umfrage", {
+        .post("http://206.81.16.50:3000/umfrage", {
           name: this.umfrageName,
           teilnehmerAnzahl: this.maxUsers,
           maxBegriffeTeilnehmer: this.maxWordsPerUser,
@@ -154,11 +153,9 @@ export default {
         .then((response) => {
           this.umfrageCreated = true;
           console.log(response.data);
-          if(this.serverRunning)
-          {
+          if (this.serverRunning) {
             this.stopServer();
           }
-          
         })
         .catch((error) => {
           console.log("ERROR");
@@ -168,14 +165,14 @@ export default {
     },
     startServer() {
       axios
-        .get(`http://localhost:3000/startumfrage?joinCode=${this.joinCode}`)
+        .get(`http://206.81.16.50:3000/startumfrage?joinCode=${this.joinCode}`)
         .then(() => {
           console.log("Socket.io server started");
           this.serverRunning = true;
 
           sessionStorage.setItem("serverRunning", true);
           // Connect to the socket.io server
-          const socket = io("http://localhost:3001");
+          const socket = io("http://206.81.16.50:3001");
 
           socket.on("user joined", (user) => {
             console.log("User Joined");
@@ -189,11 +186,15 @@ export default {
     },
     stopServer() {
       axios
-        .get("http://localhost:3000/stopumfrage")
+        .get("http://206.81.16.50:3000/stopumfrage")
         .then(() => {
           console.log("Socket.io server stopped");
           this.serverRunning = false;
+          this.umfrageCreated = false;
+
           sessionStorage.setItem("serverRunning", false);
+          window.location.reload();
+          router.push("/umfragen");
         })
         .catch((error) => {
           console.error(error);

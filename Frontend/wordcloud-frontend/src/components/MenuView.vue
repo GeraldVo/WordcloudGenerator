@@ -4,13 +4,10 @@
     <div class="d-flex justify-content-between align-items-center">
       <div class="buttons">
         <router-link to="/umfragen">
-          <button class="btn btn-primary mx-3">Alle Umfragen anzeigen</button>
+          <button class="btn btn-primary mx-3">Show all surveys</button>
         </router-link>
         <router-link to="/createUmfrage">
-          <button class="btn btn-primary mx-3">Neue Umfrage starten</button>
-        </router-link>
-        <router-link to="/subsite3">
-          <button class="btn btn-primary mx-3">Subsite 3</button>
+          <button class="btn btn-primary mx-3">Start new survey</button>
         </router-link>
       </div>
       <div>

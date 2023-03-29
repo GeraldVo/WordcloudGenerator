@@ -4,8 +4,6 @@ import Login from "./components/LoginForm.vue";
 import UmfragenView from "./components/UmfragenView.vue";
 import UmfrageView from "./components/UmfrageView.vue";
 import CreateUmfrageView from "./components/CreateUmfrageView.vue";
-import SubsiteThree from "./components/SubsiteThree.vue";
-import MobileView from "./components/MobileView.vue";
 import auth from './auth';
 
 
@@ -47,26 +45,13 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-  },
-  {
-    path: "/subsite3",
-    name: "SubsiteThree",
-    component: SubsiteThree,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: "/client",
-    name: "MobileView",
-    component: MobileView,
-  },
+  }
 
 ];
 
 routes.forEach((route) => {
   route.beforeEnter = (to, from, next) => {
-    if (auth.state.loggedIn || to.name === 'Login') {
+    if (sessionStorage.getItem("loggedIn") ||auth.state.loggedIn || to.name === 'Login') {
       next();
     } else {
       next({ name: 'Login' });
