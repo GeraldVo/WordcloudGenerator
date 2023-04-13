@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container">
-    <h1 class="text-center mt-4 mb-2">My App</h1>
+    <h1 class="text-center mt-4 mb-2">Wordcloud Generator</h1>
     <MobileView />
   </div>
 </template>

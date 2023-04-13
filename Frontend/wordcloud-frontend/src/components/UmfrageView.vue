@@ -13,8 +13,8 @@
           <div class="form-group">
             <div class="row">
               <button class="btn btn-primary mt-3" @click="redrawWordcloud">
-                  Regenerate Wordcloud
-                </button>
+                Regenerate Wordcloud
+              </button>
             </div>
             <div class="row">
               <div class="col-md-12">
@@ -44,6 +44,8 @@
                     type="color"
                     v-model="selectedBackgroundColor"
                     @input="onColorChange"
+                    name="colorPicker"
+                    :style="{ opacity: selectedOpacity }"
                   />
                   <div
                     class="color-preview"
@@ -51,6 +53,18 @@
                   ></div>
                 </div>
               </div>
+            </div>
+            <div class="row">
+              <label for="opacityRange">Opacity:</label>
+              <input
+                type="range"
+                id="opacityRange"
+                name="opacityRange"
+                min="0"
+                max="1"
+                step="0.1"
+                value="1"
+                v-model="selectedOpacity">
             </div>
             <div class="row">
               <a
@@ -94,12 +108,13 @@ export default {
       maskFile: null,
       wordcloudWrapper: null,
       selectedBackgroundColor: "#FFFFFF",
+      selectedOpacity: 1
     };
   },
   computed: {
     clearDisabled() {
       return !this.maskFile;
-    }
+    },
   },
   async created() {
     try {

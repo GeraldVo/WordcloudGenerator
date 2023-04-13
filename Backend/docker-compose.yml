@@ -6,7 +6,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --bind-address=0.0.0.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123456789
+      MYSQL_ROOT_PASSWORD: aFEh96BMeR9F4Cy12k
       MYSQL_DATABASE: wordcloud
       MYSQL_ROOT_HOST: "%"
     volumes:

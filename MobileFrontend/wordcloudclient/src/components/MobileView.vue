@@ -12,7 +12,7 @@
       </button>
     </div>
     <div v-if="connected" class="input-container my-5">
-      <label for="message-input">Enter message:</label>
+      <label for="message-input">Enter term:</label>
       <div class="input-group">
         <input
           id="message-input"

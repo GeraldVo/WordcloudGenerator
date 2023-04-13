@@ -18,48 +18,50 @@
           </div>
         </div>
 
-        <div class="form-group row mb-3">
-          <label for="timelimit-input" class="col-sm-3 col-form-label"
-            >Max Timelimit in Minutes:</label
-          >
-          <div class="col-sm-9">
-            <input
-              id="timelimit-input"
-              class="form-control"
-              type="number"
-              v-model="maxTimeLimit"
-              required
-            />
+        <div style="display: none">
+          <div class="form-group row mb-3">
+            <label for="timelimit-input" class="col-sm-3 col-form-label"
+              >Max Timelimit in Minutes:</label
+            >
+            <div class="col-sm-9">
+              <input
+                id="timelimit-input"
+                class="form-control"
+                type="number"
+                v-model="maxTimeLimit"
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row mb-3">
-          <label for="max-users-input" class="col-sm-3 col-form-label"
-            >Max Users:</label
-          >
-          <div class="col-sm-9">
-            <input
-              id="max-users-input"
-              class="form-control"
-              type="number"
-              v-model="maxUsers"
-              required
-            />
+          <div class="form-group row mb-3">
+            <label for="max-users-input" class="col-sm-3 col-form-label"
+              >Max Users:</label
+            >
+            <div class="col-sm-9">
+              <input
+                id="max-users-input"
+                class="form-control"
+                type="number"
+                v-model="maxUsers"
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row mb-3">
-          <label for="max-words-input" class="col-sm-3 col-form-label"
-            >Max Words Per User:</label
-          >
-          <div class="col-sm-9">
-            <input
-              id="max-words-input"
-              class="form-control"
-              type="number"
-              v-model="maxWordsPerUser"
-              required
-            />
+          <div class="form-group row mb-3">
+            <label for="max-words-input" class="col-sm-3 col-form-label"
+              >Max Words Per User:</label
+            >
+            <div class="col-sm-9">
+              <input
+                id="max-words-input"
+                class="form-control"
+                type="number"
+                v-model="maxWordsPerUser"
+                required
+              />
+            </div>
           </div>
         </div>
 

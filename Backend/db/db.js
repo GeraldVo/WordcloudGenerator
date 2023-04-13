@@ -2,9 +2,9 @@ const mysql = require('mysql');
 
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: '172.17.0.1',
+  host: 'mysqldb',
   user: 'root',
-  password: '123456789',
+  password: 'aFEh96BMeR9F4Cy12k',
   database: 'wordcloud',
   port: '3306'
 });
